@@ -31,25 +31,16 @@ public class GroundCheckRayCast : MonoBehaviour
         
         Debug.Log("Çarpýþma algýlandý: " + ballMeshColl.gameObject.name);
     }
-    //void OnCollisionEnter(Collision ballMeshColl)
-    //{
-    //    Debug.Log("Çarpýþma algýlandý: " + ballMeshColl.gameObject.name);
-    //}
+
 
 
     private void Update()
     {
-        
-
-
         up2 = up;
         down2 = down;   
 
         Vector3 startPoint = ballPos.position;
         Vector3 direction = ballPos.forward;
-
-        
-
 
         Debug.DrawRay(startPoint, direction * groundDisRayLong, Color.red);
 
@@ -62,22 +53,18 @@ public class GroundCheckRayCast : MonoBehaviour
             //print("AntiY" + ballDisYAnti);
             potaPosY.gameObject.transform.position = new Vector3(potaPosY.position.x, potaPosZero.position.y + GroundCheckRayCast.ballDisYAnti, potaPosY.position.z);
 
-            if (RayDis < BallGroundContactFloat) {
-                
+            if (RayDis < BallGroundContactFloat) 
+            {
                 //Time.timeScale = 0f;
                 Debug.Log("Up2222");
                 down = false;
                 up = true;
-                
-
             }
             if (RayDis > 2f)
             {
-                
                 Debug.Log("Down2222"); 
                 up = false; 
-                down = true;
-                
+                down = true;  
             }
 
         }

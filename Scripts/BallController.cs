@@ -9,6 +9,7 @@ public class BallController : MonoBehaviour
     private CharacterController controller;
     private Vector3 moveDirection = Vector3.zero;
     public float speed = 2f; // Karakterin hareket hýzý
+    public float speedUpDown; 
 
 
     void Start()
@@ -21,7 +22,7 @@ public class BallController : MonoBehaviour
     {
         Debug.Log(controller.name);
 
-        balMainObj.position = transform.position;
+        //balMainObj.position = transform.position;
 
         // Dokunmatik ekran giriþlerini kullanarak karakteri hareket ettir
         if (Input.touchCount > 0)
@@ -31,7 +32,7 @@ public class BallController : MonoBehaviour
             if (touch.phase == TouchPhase.Moved)
             {
                 Vector2 touchDeltaPosition = touch.deltaPosition;
-                moveDirection = new Vector3(touchDeltaPosition.x, 0f, touchDeltaPosition.y);
+                moveDirection = new Vector3(touchDeltaPosition.x, speedUpDown, touchDeltaPosition.y);
                 moveDirection = transform.TransformDirection(moveDirection); // Yönü düzelt
 
                 moveDirection *= speed;
@@ -43,6 +44,11 @@ public class BallController : MonoBehaviour
                 controller.Move(moveDirection * Time.deltaTime);
             }
         }
+
+
+
+
+
     }
 
 

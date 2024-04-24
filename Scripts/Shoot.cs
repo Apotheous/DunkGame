@@ -7,7 +7,8 @@ public class Shoot : MonoBehaviour
 {
     public Transform ballObj, ballObjChild;
     public Transform sunset;
-    public Transform potaPosY,potaPosZero;
+    public Transform potaPosY;
+    public float TouchY;
     // Time to move from sunrise to sunset position, in seconds.
     public float journeyTime = 1.0f;
 
@@ -19,12 +20,7 @@ public class Shoot : MonoBehaviour
     void Start()
     {
         // Note the time at the start of the animation.
-        startTime = Time.time;
-       
-
-        // Foreach döngüsü ile objenin altýndaki alt objeleri geziniriz
-
-        //CharacterController characterController = sunrise.GetComponent<CharacterController>();   
+        startTime = Time.time;  
     }
     private void OnMouseDown()
     {
@@ -32,20 +28,23 @@ public class Shoot : MonoBehaviour
     }
     void Update()
     {
+
         //transform.position = ballObjChild.position;
         if (Input.touchCount > 0) // Ekrana dokunma varsa
         {
             Touch touch = Input.GetTouch(0); // Ýlk parmak dokunuþunu alýr
 
-            if (touch.phase == TouchPhase.Moved) // Dokunuþ devam ediyorsa
-            {
+            //if (touch.phase == TouchPhase.Moved) // Dokunuþ devam ediyorsa
+            //{
                 // Dokunmanýn hareket mesafesi ve yönü
                 float magnitude = touch.deltaPosition.magnitude;
-                Vector2 direction = touch.deltaPosition.normalized;
-
-                if (magnitude > 50f && direction.y > 0.5f) // Uzun ve yukarý doðru bir hareket
+               Vector2 direction = touch.deltaPosition.normalized;
+            TouchY = touch.deltaPosition.magnitude;
+            if (magnitude > 50f && direction.y > 0.5f) // Uzun ve yukarý doðru bir hareket
+            //    //{
+                //if (Mathf.Approximately(direction.y, 1f)) // Uzun ve yukarý doðru bir hareket  direction.y > 0.9f
                 {
-                    
+                TouchY = direction.y;
                     Debug.Log("Parmaðýn yukarý doðru hýzlý ve uzun bir hareketi algýlandý!");
                     // Buraya yukarý doðru hýzlý ve uzun harekette yapýlacak iþlemler eklenebilir
             
@@ -61,7 +60,7 @@ public class Shoot : MonoBehaviour
                     shooting = true;
                     
                 }
-            }
+            //}
         }
 
         if (shooting == true)
