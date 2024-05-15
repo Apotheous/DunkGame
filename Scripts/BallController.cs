@@ -48,11 +48,11 @@ public class BallController : MonoBehaviour
 
         if (up && !down)
         {
-            CharacterUp();
+            CharacterUpDown(controller);
         }
         if (down && !up)
         {
-            CharacterDown();
+            CharacterUpDown(controller);
         }
         Vector3 startPoint = ballPos.position;
         Vector3 direction = ballPos.forward;
@@ -87,14 +87,11 @@ public class BallController : MonoBehaviour
         {
             Touch touch = Input.GetTouch(0); // Ýlk dokunma
 
-
             // Delta pozisyonu hesapla
             Vector2 touchDeltaPosition = (Input.touchCount > 0) ? (Input.GetTouch(0).position - previousTouchPos) : Vector2.zero;
             //Vector2 touchDeltaPosition = touch.deltaPosition;
             if (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
             {
-
-
                 Vector2 touchPosition = touch.position;
                 moveDirection = new Vector3(touchDeltaPosition.x* speedMoving, speedUpDown, touchDeltaPosition.y* speedMoving);
                 moveDirection = transform.TransformDirection(moveDirection); // Yönü düzelt
@@ -116,22 +113,9 @@ public class BallController : MonoBehaviour
     }
 
 
-    public void CharacterDown()
+    private void CharacterUpDown(CharacterController Cntrllr )
     {
-        moveDirection = new Vector3(controller.transform.position.x, speedUpDown, controller.transform.position.y);
-        moveDirection = transform.TransformDirection(moveDirection); // Yönü düzelt
-
-        moveDirection *= speed;
-
-        // Karakterin yerçekimini uygula
-        moveDirection.y -= 9.81f * Time.deltaTime;
-
-        // Karakteri hareket ettir
-        controller.Move(moveDirection * Time.deltaTime);
-    }
-    public void CharacterUp()
-    {
-        moveDirection = new Vector3(controller.transform.position.x, speedUpDown, controller.transform.position.y);
+        moveDirection = new Vector3(Cntrllr.transform.position.x, speedUpDown, Cntrllr.transform.position.y);
         moveDirection = transform.TransformDirection(moveDirection); // Yönü düzelt
 
         moveDirection *= speed;
