@@ -8,7 +8,6 @@ public class CamLookAt : MonoBehaviour
     public float distanceFromTarget; // Hedef objeden sabit mesafe
     public float fixedHeight ; // Kameranýn sabit yüksekliði
 
-
     void LateUpdate()
     {
         // Kameranýn yeni pozisyonunu belirle

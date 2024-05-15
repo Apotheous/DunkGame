@@ -4,15 +4,7 @@ using UnityEngine;
 
 public class RayCamPosController : MonoBehaviour
 {
-
     public Transform RayCamTransfom;
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()

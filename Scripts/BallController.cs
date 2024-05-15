@@ -14,9 +14,6 @@ public class BallController : MonoBehaviour
     public float speedJump = 2f; // Karakterin hareket hýzý
     public float speedUpDown;
 
-
-
-
     public Transform ballPos;
     [SerializeField] private float groundDisRayLong, RayDis, BallGroundContactFloat;
     [SerializeField] private LayerMask checkLayers;
@@ -48,7 +45,6 @@ public class BallController : MonoBehaviour
                 previousTouchPos = touch.position;
             }
         }
-
 
         if (up && !down)
         {
