@@ -44,10 +44,10 @@ public class Shooot : MonoBehaviour
             print("Distance to other: " + potaPosYDist);
         }
         
-        if (Input.touchCount > 0) // Ekrana dokunma varsa
+        if (Input.touchCount > 0)
         {
-            Touch touch = Input.GetTouch(0); // Ýlk parmak dokunuþunu alýr
-            // Dokunmanýn hareket mesafesi ve yönü
+            Touch touch = Input.GetTouch(0);
+  
             float magnitude = touch.deltaPosition.magnitude;
             Vector2 direction = touch.deltaPosition.normalized;
             TouchY = touch.deltaPosition.magnitude;
@@ -57,11 +57,6 @@ public class Shooot : MonoBehaviour
            
             if (touch.deltaPosition.y > 50f && Mathf.Abs(touch.deltaPosition.x) < 3f)
             {
-             TouchY = direction.y;
-             Debug.Log("Parmaðýn yukarý doðru hýzlý ve uzun bir hareketi algýlandý!");
-             // Buraya yukarý doðru hýzlý ve uzun harekette yapýlacak iþlemler eklenebilir
-
-             //sunrise.GetComponent<CharacterController>().enabled = false;
              if (sunsetPosDist >= 15f) { shooting = false; shootingLong = true; }
              else if (sunsetPosDist > 1f && sunsetPosDist < 15f) { shootingLong = false; shooting = true; }
             }
@@ -94,7 +89,6 @@ public class Shooot : MonoBehaviour
                 BallComptOn();
                 shootingLong = false;
                 lookAtLock= true;
-                
             }
         }
 
@@ -106,7 +100,6 @@ public class Shooot : MonoBehaviour
     {
         Vector3 center = (ball.position + pota.position) * 0.2F;
 
-
         // move the center a bit downwards to make the arc vertical// yayý dikey yapmak için merkezi biraz aþaðý doðru hareket ettirin
         center -= new Vector3(0, 2, 0);
 
@@ -114,9 +107,6 @@ public class Shooot : MonoBehaviour
         Vector3 riseRelCenter = ball.position - center;
         Vector3 setRelCenter = pota.position - center;
 
-        // The fraction of the animation that has happened so far is// Animasyonun þu ana kadar gerçekleþen kýsmý
-        // equal to the elapsed time divided by the desired time for// geçen sürenin istenen süreye bölünmesine eþittir
-        // the total journey.                                       // toplam yolculuk.    
         float fracComplete = (Time.time - startTime) / journeyTime;
 
         transform.position = Vector3.Slerp(riseRelCenter, setRelCenter, fracComplete);
