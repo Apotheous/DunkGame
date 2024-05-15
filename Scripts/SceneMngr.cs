@@ -7,7 +7,7 @@ public class SceneMngr : MonoBehaviour
 {
     public void SceneMthd()
     {
-        LoadScene("SampleScene");
+        LoadScene("Trial2");
     }
     public void LoadScene(string sceneName)
     {

@@ -5,8 +5,8 @@ using UnityEngine;
 public class CamLookAt : MonoBehaviour
 {
     public Transform targetObject; // Hedef obje
-    public float distanceFromTarget = 5.0f; // Hedef objeden sabit mesafe
-    public float fixedHeight = 5.0f; // Kameranýn sabit yüksekliði
+    public float distanceFromTarget; // Hedef objeden sabit mesafe
+    public float fixedHeight ; // Kameranýn sabit yüksekliði
 
 
     void LateUpdate()
