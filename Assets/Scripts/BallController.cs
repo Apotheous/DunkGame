@@ -17,16 +17,18 @@ public class BallController : MonoBehaviour
     public Transform ballPos;
     [SerializeField] private float groundDisRayLong, RayDis, BallGroundContactFloat;
     [SerializeField] private LayerMask checkLayers;
-    public bool up, down,moving;
+    public bool up, down;
 
     public Vector2 touchPosXY;
     private Vector2 previousTouchPos;
+
     void Start()
     {
         speedUpDown = -50f;
         up = false;
         down = true;
-        controller = GetComponent<CharacterController>();  
+        controller = GetComponent<CharacterController>();
+        Debug.Log("STartÇalýþtý");
     }
 
     // Update is called once per frame
@@ -70,6 +72,8 @@ public class BallController : MonoBehaviour
                 speedUpDown = 30f;
                 down = false;
                 up = true;
+
+
             }
             if (RayDis > 2f)
             {
@@ -80,9 +84,6 @@ public class BallController : MonoBehaviour
             }
         }
 
-        Debug.Log(controller.name);
-
-        //balMainObj.position = transform.position;
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0); // Ýlk dokunma
@@ -90,40 +91,39 @@ public class BallController : MonoBehaviour
             // Delta pozisyonu hesapla
             Vector2 touchDeltaPosition = (Input.touchCount > 0) ? (Input.GetTouch(0).position - previousTouchPos) : Vector2.zero;
             //Vector2 touchDeltaPosition = touch.deltaPosition;
-            if (touch.phase == TouchPhase.Moved || touch.phase == TouchPhase.Stationary)
+            if (touch.phase == TouchPhase.Moved)
             {
-                Vector2 touchPosition = touch.position;
-                moveDirection = new Vector3(touchDeltaPosition.x* speedMoving, speedUpDown, touchDeltaPosition.y* speedMoving);
-                moveDirection = transform.TransformDirection(moveDirection); // Yönü düzelt
-
-                moveDirection *= speed;
-                //moveDirection =moveDirection * speed;
-
-                // Karakterin yerçekimini uygula
-                moveDirection.y -= 9.81f * Time.deltaTime;
-
-                // Karakteri hareket ettir
-                controller.Move(moveDirection * Time.deltaTime);
-                Debug.Log("TouchPosDelta" + touchDeltaPosition);
-                Debug.Log("TouchPos" + touchPosition);
-                touchPosXY = touchDeltaPosition;
-                Debug.Log("touchPosXY" + touchPosXY);
+                CharacterMove(touchDeltaPosition);
             }
         }
     }
 
-
-    private void CharacterUpDown(CharacterController Cntrllr )
+    private void CharacterMove(Vector2 touchDeltaPosition)
     {
-        moveDirection = new Vector3(Cntrllr.transform.position.x, speedUpDown, Cntrllr.transform.position.y);
+        moveDirection = new Vector3(touchDeltaPosition.x * speedMoving, speedUpDown, touchDeltaPosition.y * speedMoving);
         moveDirection = transform.TransformDirection(moveDirection); // Yönü düzelt
 
         moveDirection *= speed;
+        //moveDirection =moveDirection * speed;
 
         // Karakterin yerçekimini uygula
         moveDirection.y -= 9.81f * Time.deltaTime;
 
         // Karakteri hareket ettir
+        controller.Move(moveDirection * Time.deltaTime);
+    }
+    private void CharacterUpDown(CharacterController Cntrllr)
+    {
+        moveDirection = new Vector3(Cntrllr.transform.position.x, speedUpDown, Cntrllr.transform.position.y);
+        StaticObjects.DebugText.text = (moveDirection.ToString());
+        moveDirection = transform.TransformDirection(moveDirection); // Yönü düzelt
+
+        moveDirection *= speed;
+
+        //// Karakterin yerçekimini uygula
+        moveDirection.y -= 9.81f * Time.deltaTime;
+
+        //// Karakteri hareket ettir
         controller.Move(moveDirection * Time.deltaTime);
     }
 }
