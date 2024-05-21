@@ -6,27 +6,25 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Shooot : MonoBehaviour
 {
-
-    public Rigidbody ball;
- 
-
+    
+    Rigidbody ball;
+    //
     public float h = 25;
     public float gravity = -18;
-
     public bool debugPath;
 
     //
-
     public bool  canLaunch;
     public float launchForce; // Fýrlatma kuvveti
     public float launchAngle; // Fýrlatma açýsý
     public float shootForce;
-    Rigidbody body;
 
 
-    public Transform ballObj;
-    public Transform sunset;
-    public Transform LookAtObj,FailShootTargetObj;
+    //
+    [HideInInspector]
+    public Transform ballObj, sunset,LookAtObj,FailShootTargetObj;
+
+    [HideInInspector]
     public float potaPosYDist, sunsetPosDist, pCntrFloat, pCntrFloat2, pCntrFloat1, pCntrFloat3;
     // Time to move from sunrise to sunset position, in seconds.
     public float journeyTime = 1.0f;
@@ -35,23 +33,18 @@ public class Shooot : MonoBehaviour
     private float startTime;
     public bool BasketShoot= false, FailShoot=false, lookAtLock = true;
 
-    public GameObject CenterObjectPota;
-    public GameObject CenterObjectBall;
-    public GameObject CenterObject;
-    public GameObject BallColl;
     void Start()
     {
+        
         lookAtLock = false;
-
+        ball = GetComponent<Rigidbody>();
+        BodyTurnOff();
         // Note the time at the start of the animation.
         startTime = Time.time;
 
         // Baþlangýçta CenterObject'ý iki objenin tam ortasýna yerleþtir
         UpdateCenterPosition();
 
-        body= GetComponent<Rigidbody>();
-        BodyTurnOff();
-        
 
     }
     void Update()
@@ -59,7 +52,7 @@ public class Shooot : MonoBehaviour
         // Her güncelleme adýmýnda CenterObject'ýn pozisyonunu güncelle
         UpdateCenterPosition();
         
-        if (sunset)//LookAtObj && 
+        if (LookAtObj && sunset)// 
         {
             potaPosYDist = Vector3.Distance(FailShootTargetObj.position, transform.position);
             sunsetPosDist = Vector3.Distance(sunset.position, transform.position); 
@@ -88,7 +81,7 @@ public class Shooot : MonoBehaviour
         if (FailShoot == true)
         {
 
-            BallComptOff();
+            //BallComptOff();
             //ShootingFonc(ballObj, LongShootPosY,pCntrFloat, pCntrFloat2, pCntrFloat1, pCntrFloat3);
             //BodyTurnON();
             //ShootBall(FailShootTargetObj);
@@ -101,7 +94,6 @@ public class Shooot : MonoBehaviour
                 FailShoot = false;
                 //*lookAtLock = true;
                 BodyTurnOff();
-
             }
         }
 
@@ -109,7 +101,6 @@ public class Shooot : MonoBehaviour
 
         if (Input.touchCount > 0)
         {
-
             Touch touch = Input.GetTouch(0);
             #region BallTouch
             //Ray ray = Camera.main.ScreenPointToRay(touch.position);
@@ -132,7 +123,7 @@ public class Shooot : MonoBehaviour
                     //canLaunch = false;
                     BallComptOff();
 
-                    Launch();
+                    Launch(sunset);
                     //ballLauncher.LaunchFonc();
                     //BodyTurnON();
                     //ShootBall(sunset , 30);
@@ -144,36 +135,33 @@ public class Shooot : MonoBehaviour
                     FailShoot = true;
                     //canLaunch = false;
                     BallComptOff();
-                    BodyTurnON();
-
+                    //BodyTurnON();
+                    Launch(FailShootTargetObj);
                     //ShootBall(LongShootPosY,45);
 
                 }
             }
         }
-              
-
-
-
     }
-    public void LaunchFonc()
+    #region newShootCode
+    public void LaunchFonc(Transform target)
     {
-        Launch();
+        Launch(target);
     }
-    void Launch()
+
+    void Launch(Transform target)
     {
         BallComptOff();
         ball.isKinematic = false;
         Physics.gravity = Vector3.up * gravity;
         ball.useGravity = true;
-        ball.velocity = CalculateLaunchData().initialVelocity;
+        ball.velocity = CalculateLaunchData(target).initialVelocity;
     }
 
-    LaunchData CalculateLaunchData()
+    LaunchData CalculateLaunchData(Transform target)
     {
-
-        float displacementY = sunset.position.y - ball.position.y;
-        Vector3 displacementXZ = new Vector3(sunset.position.x - ball.position.x, 0, sunset.position.z - ball.position.z);
+        float displacementY = target.position.y - ball.position.y;
+        Vector3 displacementXZ = new Vector3(target.position.x - ball.position.x, 0, target.position.z - ball.position.z);
         float time = Mathf.Sqrt(-2 * h / gravity) + Mathf.Sqrt(2 * (displacementY - h) / gravity);
         Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * h);
         Vector3 velocityXZ = displacementXZ / time;
@@ -181,9 +169,9 @@ public class Shooot : MonoBehaviour
         return new LaunchData(velocityXZ + velocityY * -Mathf.Sign(gravity), time);
     }
 
-    void DrawPath()
+    void DrawPath(Transform target)
     {
-        LaunchData launchData = CalculateLaunchData();
+        LaunchData launchData = CalculateLaunchData(target);
         Vector3 previousDrawPoint = ball.position;
 
         int resolution = 30;
@@ -207,10 +195,10 @@ public class Shooot : MonoBehaviour
             this.initialVelocity = initialVelocity;
             this.timeToTarget = timeToTarget;
         }
-
     }
+    #endregion
 
-
+    #region oldShootCode
     //launch for rigidbody with addforce
     void ShootBall(Transform target)
     {
@@ -233,48 +221,16 @@ public class Shooot : MonoBehaviour
         Vector3 force = velocity * direction.normalized;
 
         // Mevcut hýzý sýfýrla
-        body.velocity = Vector3.zero;
+        ball.velocity = Vector3.zero;
 
         // Kuvvet uygula
-        body.AddForce(force, ForceMode.VelocityChange);
+        ball.AddForce(force, ForceMode.VelocityChange);
     }
+    #endregion
 
-    private void BodyTurnOff()
-    {
-        if (body != null)
-        {
-            body.isKinematic = true; // Rigidbody'nin dinamik fizik etkilerini devre dýþý býrak
-
-        }
-        else
-        {
-            Debug.Log("RigidBody bileþeni mevcut deðil.");
-        }
-    }  
-    private void BodyTurnON()
-    {
-        if (body != null)
-        {
-            body.isKinematic = false; // Rigidbody'nin dinamik fizik etkilerini devre dýþý býrak
-
-        }
-        else
-        {
-            Debug.Log("RigidBody bileþeni mevcut deðil.");
-        }
-    }
-    void OnTouchBall()
-    {
-        // Objenin dokunulduðunda çalýþacak kodu buraya yaz
-        Debug.Log("Objeye dokunuldu!");
-        StaticObjects.DebugText3.text = "Ball Touched";
-        
-        if (sunsetPosDist > 1f && sunsetPosDist < 15f) { FailShoot = false; BasketShoot = true; }
-        if (sunsetPosDist >= 15f) { BasketShoot = false; FailShoot = true; }
-    }
-
+    #region withSlerpShootCode
     //Slerp ile fýrlatma kodu
-    private void ShootingFonc(Transform ball, Transform target ,float centerFlt ,float centerFlt2, float centerFlt1, float centerFlt3)
+    private void ShootingFonc(Transform ball, Transform target, float centerFlt, float centerFlt2, float centerFlt1, float centerFlt3)
     {
         Vector3 center = (ball.position + target.position) * centerFlt;
 
@@ -290,20 +246,41 @@ public class Shooot : MonoBehaviour
         ball.position = Vector3.Slerp(riseRelCenter, setRelCenter, fracComplete);
         ball.position += center;
     }
+    #endregion
+    private void BodyTurnOff()
+    {
+        if (ball != null)
+        {
+            ball.isKinematic = true; // Rigidbody'nin dinamik fizik etkilerini devre dýþý býrak
 
+        }
+        else
+        {
+            Debug.Log("RigidBody bileþeni mevcut deðil.");
+        }
+    }  
+    private void BodyTurnON()
+    {
+        if (ball != null)
+        {
+            ball.isKinematic = false; // Rigidbody'nin dinamik fizik etkilerini devre dýþý býrak
 
-
-
+        }
+        else
+        {
+            Debug.Log("RigidBody bileþeni mevcut deðil.");
+        }
+    }
     void UpdateCenterPosition()
     {
         if (BasketShoot==false && FailShoot == false)
         {
-        // Pota ve Ball objelerinin pozisyonlarýný al
-        Vector3 potaPos = CenterObjectPota.transform.position;
-        Vector3 ballPos = CenterObjectBall.transform.position;
+        //// Pota ve Ball objelerinin pozisyonlarýný al
+        Vector3 potaPos = sunset.transform.position;
+        Vector3 ballPos = ballObj.transform.position;
 
         // CenterObject'ý iki objenin tam ortasýna yerleþtir
-        CenterObject.transform.position = (potaPos + ballPos) / 2f;
+        FailShootTargetObj.transform.position = (potaPos + ballPos) / 2f;
         }
     }
     private void BallComptOn()

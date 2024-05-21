@@ -11,24 +11,31 @@ public class BallTurnOn : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
+    void OnTriggerEnter(Collider other)
     {
-        
-    }
+        if (other.gameObject.name== "BallSkin")
+        {
+            Debug.Log("Succes Basket1");
+            ball.GetComponent<CharacterController>().enabled = true;
+            ball.GetComponent<BallController>().enabled = true;
+            //ball.GetComponent<MeshCollider>().enabled = true;
+            Debug.Log("Succes Basket1");
 
+            ball.GetComponent<Shooot>().enabled = true;
+            Debug.Log("Succes Basket1");
+        }
+        //if (other.gameObject.name== "BallSkin")
+        //{
+        //    Debug.Log("Succes Basket1");
+        //    ball.GetComponent<CharacterController>().enabled = true;
+        //    ball.GetComponent<BallController>().enabled = true;
+        //    //ball.GetComponent<MeshCollider>().enabled = true;
+        //    Debug.Log("Succes Basket1");
 
+        //    ball.GetComponent<Shooot>().enabled = true;
+        //    Debug.Log("Succes Basket1");
+        //}
 
-    void OnCollisionExit()
-    {
-        Debug.Log("Shooterer1");
-        ball.GetComponent<CharacterController>().enabled = true;
-        ball.GetComponent<BallController>().enabled = true;
-        //ball.GetComponent<MeshCollider>().enabled = true;
-        Debug.Log("111Shooterer1");
-
-        ball.GetComponent<Shooot>().enabled = true;
-        Debug.Log("Shooterer2221");
     }
 
 }

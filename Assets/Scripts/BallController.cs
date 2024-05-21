@@ -34,7 +34,6 @@ public class BallController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //ballMainObj.transform.position = transform.position;
         StaticObjects.DebugText3.text = Input.touchCount.ToString();
 
         if (Input.touchCount > 0)
