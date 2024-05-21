@@ -19,5 +19,8 @@ Function that directs the ball based on the running distance when the throw occu
 
 ![image](https://github.com/Apotheous/DunkGame/assets/73647085/d587974b-3ede-408b-b55e-d0870c9e712d)
 
+New added shot code.
+![image](https://github.com/Apotheous/DunkGame/assets/73647085/726eedf5-7ef6-47e9-a57c-107fa1f27f6a)
 
-https://github.com/Apotheous/DunkGame/assets/73647085/e88a3a74-badd-4d38-9668-814c8810ac35
+https://github.com/Apotheous/DunkGame/assets/73647085/c8bc81ec-c38e-461a-bab2-43aaf1adad57
+
